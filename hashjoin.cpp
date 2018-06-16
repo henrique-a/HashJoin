@@ -20,7 +20,7 @@ class Hasher {
 };
 
 vector<int> readTable(){
-    ifstream file("teste1.txt");
+    ifstream file("ps_partkey.txt");
     string row;
     vector<int> column;
     while (file >> row) {
@@ -42,10 +42,9 @@ vector<pair<int,int>> hashjoin(const vector<int>& Ra, ifstream& Sb) {
     vector<pair<int,int>> output;
     string row;
     while (Sb >> row) {
-        auto range = hashmap.equal_range(row); // Retorna um par de ponteiros, um para o primeiro elemento do bucket com chave Sb[i] e o outro para o último elemento do bucket com chave Sb[i]
-        
-        for(auto it = range.first; it != range.second; ++it) { // "range.first" é o ponteiro para o primeiro elemento do bucket, "range.second" é o ponteiro para o último elemento do bucket
-            output.push_back(make_pair((Ra[it->second]), atoi(row.c_str()))); // "it->second" é o valor do elemento que tá no bucket, "it->first" é a chave do bucket
+        auto range = hashmap.equal_range(row); // Returns a pair of pointers, the first points to the first element of the bucket with key Sb[i]. The second points to the last element of the bucket with key Sb[i]
+        for(auto it = range.first; it != range.second; ++it) { // "range.first" is the pointer to the first element of the bucket, "range.second" is the pointer to the last element of the bucket
+            output.push_back(make_pair((Ra[it->second]), atoi(row.c_str()))); // "it->second" os the value of the element in the bucket, "it->first" is the key of the bucket
         }
     }
     return output;
@@ -54,25 +53,15 @@ vector<pair<int,int>> hashjoin(const vector<int>& Ra, ifstream& Sb) {
 int main(int argc, char const *argv[]) {
 
     vector<int> col1 = readTable();
-    ifstream col2("teste2.txt");
+    ifstream col2("l_partsupp.txt");
 
-//   cout << "Column R.a: " << endl;
-//   for (auto& element : col1) {
-//       cout << element << endl;
-//   }
+    auto result = hashjoin(col1, col2);
+    cout << "Result: " << endl;
 
-//   cout << "Column S.b: " << endl;
-//   for (auto& element : col2) {
-//       cout << element << endl;
-//   }
-  
-  auto result = hashjoin(col1, col2);
-  cout << "Result: " << endl;
-
-  // Imprimindo resultado
-  for (auto& element : result) {
-      cout << element.first << ", " << element.second << endl;
-  }
-  return 0;
+    // Printing result
+    for (auto& element : result) {
+        cout << element.first << ", " << element.second << endl;
+    }
+    return 0;
 }
 
